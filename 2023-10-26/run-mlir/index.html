@@ -1,0 +1,173 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>使用 C++ 执行 LinAlg | バグ</title><meta name="author" content="Kattos"><meta name="copyright" content="Kattos"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="编写 MLIR，相应的函数要有 llvm.emit_c_interface 的属性  123456func.func @matmul(%lhs : memref&lt;2x3xf32&gt;, %rhs : memref&lt;3x2xf32&gt;, %out : memref&lt;2x2xf32&gt;)   attributes &amp;#123;llvm.emit_c_interface&amp;#">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 C++ 执行 LinAlg">
+<meta property="og:url" content="http://example.com/2023-10-26/run-mlir/index.html">
+<meta property="og:site_name" content="バグ">
+<meta property="og:description" content="编写 MLIR，相应的函数要有 llvm.emit_c_interface 的属性  123456func.func @matmul(%lhs : memref&lt;2x3xf32&gt;, %rhs : memref&lt;3x2xf32&gt;, %out : memref&lt;2x2xf32&gt;)   attributes &amp;#123;llvm.emit_c_interface&amp;#">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/paging.jpg">
+<meta property="article:published_time" content="2023-10-26T08:51:58.000Z">
+<meta property="article:modified_time" content="2023-10-26T09:07:36.044Z">
+<meta property="article:author" content="Kattos">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/paging.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023-10-26/run-mlir/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '使用 C++ 执行 LinAlg',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-10-26 17:07:36'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">バグ</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">使用 C++ 执行 LinAlg</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2023-10-26T08:51:58.000Z" title="发表于 2023-10-26 16:51:58">2023-10-26</time></span></div><div class="meta-secondline"></div></div></div><article class="post-content" id="article-container"><ol>
+<li>编写 MLIR，相应的函数要有 llvm.emit_c_interface 的属性</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">func.func @matmul(%lhs : memref&lt;2x3xf32&gt;, %rhs : memref&lt;3x2xf32&gt;, %out : memref&lt;2x2xf32&gt;) </span><br><span class="line">  attributes &#123;llvm.emit_c_interface&#125; &#123;</span><br><span class="line">  linalg.matmul ins(%lhs, %rhs : memref&lt;2x3xf32&gt;, memref&lt;3x2xf32&gt;) </span><br><span class="line">                outs(%out : memref&lt;2x2xf32&gt;)</span><br><span class="line">  return</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>将 MLIR lower 到 LLVM Dialect</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mlir-opt matmul.mlir \</span><br><span class="line">  --convert-linalg-to-parallel-loops \</span><br><span class="line">  --convert-scf-to-cf \</span><br><span class="line">  --convert-cf-to-llvm \</span><br><span class="line">  --convert-func-to-llvm \</span><br><span class="line">  --finalize-memref-to-llvm \</span><br><span class="line">  --canonicalize \</span><br><span class="line">  &gt; matmul-llvm.mlir</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>将 MLIR translate 到 LLVM IR</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mlir-translate matmul-llvm.mlir --mlir-to-llvmir &gt; matmul.ll</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>将 LLVM IR 编译为动态库</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang++ matmul.ll --shared -o libmm.so</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>编写 C++（<a target="_blank" rel="noopener" href="https://gist.github.com/Kattos/05af0b3526563f776d9b9ec11f712eac">完整代码</a>），通过 <code>MemRefDescriptor</code> 处理 memref 类型</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="type">size_t</span> N&gt; <span class="keyword">struct</span> <span class="title class_">MemRefDescriptor</span> &#123;</span><br><span class="line">  T* allocated;</span><br><span class="line">  T* aligned;</span><br><span class="line"></span><br><span class="line">  <span class="type">intptr_t</span> offset;</span><br><span class="line">  <span class="type">intptr_t</span> sizes[N];</span><br><span class="line">  <span class="type">intptr_t</span> strides[N];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>编译 binary 并执行</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">clang++ matmul.cpp -L. -lmm -o matmul</span><br><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=<span class="variable">$LD_LIBRARY_PATH</span>:<span class="variable">$PWD</span></span><br><span class="line">./matmul</span><br></pre></td></tr></table></figure>
+<p>参考：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/635955420">[MLIR] matmul cpu性能测试</a></li>
+<li><a target="_blank" rel="noopener" href="https://mlir.llvm.org/docs/TargetLLVMIR/#ranked-memref-types">LLVM IR Target</a></li>
+</ol>
+</article><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023-06-12/conv2d-backward/"><img class="next-cover" src="/img/paging.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Conv2D 的反向传播</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Kattos</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Kattos"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023-10-26/run-mlir/" title="使用 C++ 执行 LinAlg">使用 C++ 执行 LinAlg</a><time datetime="2023-10-26T08:51:58.000Z" title="发表于 2023-10-26 16:51:58">2023-10-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023-06-12/conv2d-backward/" title="Conv2D 的反向传播">Conv2D 的反向传播</a><time datetime="2023-06-12T14:45:48.000Z" title="发表于 2023-06-12 22:45:48">2023-06-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023-05-16/test-mlir-python-bindings/" title="使用 MLIR Python Bindings 进行端到端测试">使用 MLIR Python Bindings 进行端到端测试</a><time datetime="2023-05-16T07:00:20.000Z" title="发表于 2023-05-16 15:00:20">2023-05-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023-05-14/highlight-mlir-in-latex/" title="在 LaTeX 中实现 MLIR 代码高亮">在 LaTeX 中实现 MLIR 代码高亮</a><time datetime="2023-05-14T08:02:08.000Z" title="发表于 2023-05-14 16:02:08">2023-05-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023-04-30/try-manim/" title="使用 manim 绘制动图">使用 manim 绘制动图</a><time datetime="2023-04-30T12:31:03.000Z" title="发表于 2023-04-30 20:31:03">2023-04-30</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Kattos</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div></div></body></html>
